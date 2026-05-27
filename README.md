@@ -1,5 +1,10 @@
 # patent-search-mcp-server
 
+[![npm version](https://img.shields.io/npm/v/patent-search-mcp-server.svg)](https://www.npmjs.com/package/patent-search-mcp-server)
+[![MCP Registry](https://img.shields.io/badge/MCP%20Registry-active-2da44e)](https://registry.modelcontextprotocol.io/v0/servers?search=patent-search)
+[![Glama](https://img.shields.io/badge/Glama-listed-blue)](https://glama.ai/mcp/servers/smythmyke/patent-search-mcp-server)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+
 MCP (Model Context Protocol) server for the **AI Patent Search Generator** — patent dossiers, prosecution history, Office Action AI analysis, citation/family/CPC lookups, and Google Patents search. Works in Claude Code, Claude Desktop, Cursor, ChatGPT-with-MCP, and any other MCP-compatible client.
 
 11 tools available: `balance`, `dossier`, `prosecution`, `oa_analyze`, `examiner`, `query`, `search`, `similar`, `citations`, `family`, `cpc`.
