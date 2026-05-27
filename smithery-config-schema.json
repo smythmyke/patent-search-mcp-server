@@ -1,0 +1,17 @@
+{
+  "type": "object",
+  "required": ["PATENT_SEARCH_API_KEY"],
+  "properties": {
+    "PATENT_SEARCH_API_KEY": {
+      "type": "string",
+      "title": "Patent Search API Key",
+      "description": "API key minted from the AI Patent Search Generator Chrome extension's Admin tab. Format: psg_live_... or psg_test_..."
+    },
+    "PATENT_SEARCH_API_BASE": {
+      "type": "string",
+      "title": "API Base URL (optional)",
+      "description": "Override the API base URL. Default https://us-central1-solicitation-matcher-extension.cloudfunctions.net/ai/v1",
+      "default": "https://us-central1-solicitation-matcher-extension.cloudfunctions.net/ai/v1"
+    }
+  }
+}
