@@ -1,0 +1,217 @@
+[
+  {
+    "name": "balance",
+    "description": "Return the current credit balance and subscription status for the authenticated AI Patent Search Generator account. Use this before calling paid tools (dossier, oa_analyze, query, search) to verify credits are available.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {},
+      "additionalProperties": false
+    }
+  },
+  {
+    "name": "dossier",
+    "description": "Fetch a comprehensive intelligence dossier for a patent by publication number. Returns bibliographic data, independent claims, backward + forward citations, patent family, CPC classifications, examiner info, and similar documents. Costs 3 credits on a fresh fetch; subsequent calls within 24 hours read from cache and are free. The headline tool - most patent-analysis workflows start here.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "patentNumber": {
+          "type": "string",
+          "description": "Publication number in canonical form (e.g. US10867416B2, EP3500001B1). Accepts loose input - the server normalizes."
+        }
+      },
+      "required": [
+        "patentNumber"
+      ],
+      "additionalProperties": false
+    }
+  },
+  {
+    "name": "prosecution",
+    "description": "Retrieve the USPTO file-wrapper documents (office actions, responses, amendments, IDS, notices) for a US patent or application. Free. Returns each documents ID, mail date, category, and short description - IDs can be passed to oa_analyze for AI analysis.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "patentNumber": {
+          "type": "string",
+          "description": "Patent publication number (e.g. US10867416B2). One of patentNumber or applicationNumber required."
+        },
+        "applicationNumber": {
+          "type": "string",
+          "description": "USPTO application number (e.g. 15912345). One of patentNumber or applicationNumber required."
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  {
+    "name": "oa_analyze",
+    "description": "AI-analyze a USPTO Office Action document to extract rejection grounds (102, 103, 112, etc.), cited prior art, and suggested response arguments. Two invocation forms: (1) pass only patentNumber and the server auto-picks the most recent Office Action; (2) pass both applicationNumber and documentId for explicit selection. First 5 analyses per application are free; subsequent analyses cost 1 credit each.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "patentNumber": {
+          "type": "string",
+          "description": "Patent publication number - auto-picks the most recent OA for this patent."
+        },
+        "applicationNumber": {
+          "type": "string",
+          "description": "Application number for explicit selection (used with documentId)."
+        },
+        "documentId": {
+          "type": "string",
+          "description": "Office Action document ID from prosecution-history output (used with applicationNumber)."
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  {
+    "name": "examiner",
+    "description": "Get the assigned examiners name, art unit, total applications handled, allowance rate, and average pendency for a US patent. Free. Useful for prosecution strategy and risk assessment.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "patentNumber": {
+          "type": "string",
+          "description": "Patent publication number (e.g. US10867416B2)."
+        }
+      },
+      "required": [
+        "patentNumber"
+      ],
+      "additionalProperties": false
+    }
+  },
+  {
+    "name": "query",
+    "description": "Generate a single optimized Boolean search query for Google Patents from a natural-language description of an invention or technology. Returns the Boolean string only - does NOT execute the search. Use search if you want ranked hits instead. Costs 1 credit.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "description": {
+          "type": "string",
+          "description": "Natural-language description of the invention or technology area. Minimum 10 characters."
+        }
+      },
+      "required": [
+        "description"
+      ],
+      "additionalProperties": false
+    }
+  },
+  {
+    "name": "search",
+    "description": "Execute a patent search against Google Patents server-side and return ranked hits. Given a natural-language description and a search strategy, the server: (1) extracts technical concepts, (2) generates Boolean queries per the chosen strategy, (3) runs each query against Google Patents, (4) dedupes results by publication number. Strategies: telescoping (3 queries: broad/moderate/narrow - recommended default), onion-ring (layered queries adding one concept at a time), faceted (multiple two-concept pair queries). Costs 1 credit.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "description": {
+          "type": "string",
+          "description": "Natural-language description of the invention or technology area (minimum 10 characters)."
+        },
+        "strategy": {
+          "type": "string",
+          "enum": [
+            "telescoping",
+            "onion-ring",
+            "faceted"
+          ],
+          "description": "Search strategy. Defaults to telescoping.",
+          "default": "telescoping"
+        },
+        "limit": {
+          "type": "number",
+          "description": "Maximum number of deduplicated hits to return (default 20, max 100).",
+          "default": 20
+        }
+      },
+      "required": [
+        "description"
+      ],
+      "additionalProperties": false
+    }
+  },
+  {
+    "name": "similar",
+    "description": "Return Google Patents similar documents ranking for a given patent - a list of patents that Google considers technically related based on its own semantic models. Free. Distinct from search (which generates new queries from a description); this tool finds patents related to an existing one.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "patentNumber": {
+          "type": "string",
+          "description": "Patent publication number (e.g. US10867416B2)."
+        },
+        "limit": {
+          "type": "number",
+          "description": "Maximum number of similar patents to return (default 20).",
+          "default": 20
+        }
+      },
+      "required": [
+        "patentNumber"
+      ],
+      "additionalProperties": false
+    }
+  },
+  {
+    "name": "citations",
+    "description": "Return backward and/or forward citations for a patent. Backward = patents this one cites (its prior art). Forward = patents that cite this one (downstream impact). Each citation includes whether it was examiner-cited (load-bearing on patentability) vs applicant-cited. Free. Lighter payload than dossier when you only need citation lists.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "patentNumber": {
+          "type": "string",
+          "description": "Patent publication number (e.g. US10867416B2)."
+        },
+        "direction": {
+          "type": "string",
+          "enum": [
+            "backward",
+            "forward",
+            "both"
+          ],
+          "description": "Which citation set to return. Defaults to both.",
+          "default": "both"
+        }
+      },
+      "required": [
+        "patentNumber"
+      ],
+      "additionalProperties": false
+    }
+  },
+  {
+    "name": "family",
+    "description": "Return the patent family for a given patent - continuations, divisionals, and national counterparts (foreign equivalents). Useful for confirming worldwide IP coverage and identifying related applications still pending. Free.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "patentNumber": {
+          "type": "string",
+          "description": "Patent publication number (e.g. US10867416B2)."
+        }
+      },
+      "required": [
+        "patentNumber"
+      ],
+      "additionalProperties": false
+    }
+  },
+  {
+    "name": "cpc",
+    "description": "Look up a Cooperative Patent Classification (CPC) code and return its section, class, subclass, and group context. Accepts any level of code - section letter (e.g. H), class (H01), subclass (H01M), main group (H01M10/00), or subgroup (H01M10/0525). Free. v1.0 dataset covers all sections + ~80 common subclasses; subgroup-level descriptions land in v1.1.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "string",
+          "description": "CPC code at any level (section, class, subclass, main group, or subgroup)."
+        }
+      },
+      "required": [
+        "code"
+      ],
+      "additionalProperties": false
+    }
+  }
+]
