@@ -8,7 +8,7 @@
 
 MCP (Model Context Protocol) server for the **AI Patent Search Generator** — patent dossiers, prosecution history, Office Action AI analysis, citation/family/CPC lookups, and Google Patents search. Works in Claude Code, Claude Desktop, Cursor, ChatGPT-with-MCP, and any other MCP-compatible client.
 
-11 tools available: `balance`, `dossier`, `prosecution`, `oa_analyze`, `examiner`, `query`, `search`, `similar`, `citations`, `family`, `cpc`.
+14 tools available: `balance`, `dossier`, `claims`, `claim_chart`, `prosecution`, `oa_analyze`, `examiner`, `query`, `search`, `similar`, `citations`, `family`, `cpc`, `cpc_suggest`.
 
 ## Prerequisites
 
@@ -131,10 +131,31 @@ Patent family — continuations, divisionals, foreign counterparts. Free.
 ```
 
 ### `cpc`
-CPC classification code lookup. Free. v1.0 covers all sections + ~80 common subclasses; subgroup descriptions land in v1.1.
+CPC classification code lookup. Free. v1.0 covers all sections + ~80 common subclasses; subgroup descriptions land in v1.2.
 
 ```
 { "code": "H01M10/0525" }
+```
+
+### `claims` *(new in v0.2.0)*
+Just the claims of a patent — much cheaper than `dossier` when you only need claim text. **Free when the dossier is cached; 1 credit cold.**
+
+```
+{ "patentNumber": "US10867416B2" }
+```
+
+### `claim_chart` *(new in v0.2.0)*
+Per-claim element chart: decomposes each independent claim into discrete elements and maps each to examiner-cited prior art from cached Office Action analyses. **Free when dossier is cached; 3 credits cold.** Call `oa_analyze` first if you want fresh OA data included.
+
+```
+{ "patentNumber": "US10867416B2", "oaDocumentIds": ["optional-filter"] }
+```
+
+### `cpc_suggest` *(new in v0.2.0)*
+Description → suggested CPC codes via AI. Returns 3–5 candidates ranked by confidence with reasoning. **1 credit; cached by description hash for 30 days.** Curated dataset (~80 subclasses) — niche chemistry/biotech may miss.
+
+```
+{ "description": "lithium-ion battery thermal management with phase change materials" }
 ```
 
 ## Environment variables

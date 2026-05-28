@@ -1,6 +1,6 @@
 {
   "name": "patent-search-mcp-server",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "mcpName": "io.github.smythmyke/patent-search-mcp-server",
   "description": "MCP server for the AI Patent Search Generator — patent dossiers, prosecution history, office-action analysis, citation/family/CPC lookups, and Google Patents search from Claude Code, Claude Desktop, Cursor.",
   "license": "MIT",

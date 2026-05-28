@@ -18,9 +18,12 @@ import { similarTool, runSimilar } from "./tools/similar.js";
 import { citationsTool, runCitations } from "./tools/citations.js";
 import { familyTool, runFamily } from "./tools/family.js";
 import { cpcTool, runCpc } from "./tools/cpc.js";
+import { claimChartTool, runClaimChart } from "./tools/claimChart.js";
+import { claimsTool, runClaims } from "./tools/claims.js";
+import { cpcSuggestTool, runCpcSuggest } from "./tools/cpcSuggest.js";
 
 const SERVER_NAME = "patent-search";
-const SERVER_VERSION = "0.1.0";
+const SERVER_VERSION = "0.2.0";
 
 function readEnv(name: string, required = true): string {
   const value = process.env[name];
@@ -56,6 +59,9 @@ async function main(): Promise<void> {
     citationsTool as unknown as Tool,
     familyTool as unknown as Tool,
     cpcTool as unknown as Tool,
+    claimChartTool as unknown as Tool,
+    claimsTool as unknown as Tool,
+    cpcSuggestTool as unknown as Tool,
   ];
 
   server.setRequestHandler(ListToolsRequestSchema, async () => ({ tools }));
@@ -75,6 +81,9 @@ async function main(): Promise<void> {
         case citationsTool.name:  return await runCitations(api, args ?? {});
         case familyTool.name:     return await runFamily(api, args ?? {});
         case cpcTool.name:        return await runCpc(api, args ?? {});
+        case claimChartTool.name: return await runClaimChart(api, args ?? {});
+        case claimsTool.name:     return await runClaims(api, args ?? {});
+        case cpcSuggestTool.name: return await runCpcSuggest(api, args ?? {});
         default:
           return errorResult(`Unknown tool: ${name}`);
       }

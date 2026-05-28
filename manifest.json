@@ -2,9 +2,9 @@
   "manifest_version": "0.3",
   "name": "patent-search-mcp-server",
   "display_name": "Patent Search MCP Server",
-  "version": "0.1.0",
-  "description": "MCP server for the AI Patent Search Generator — 11 tools for patent intelligence: dossier, prosecution, oa_analyze, search/query, similar, citations, family, examiner, cpc, balance.",
-  "long_description": "MCP (Model Context Protocol) server for the **AI Patent Search Generator** — patent dossiers, prosecution history, Office Action AI analysis, citation/family/CPC lookups, and Google Patents search.\n\nWorks in Claude Code, Claude Desktop, Cursor, ChatGPT-with-MCP, and any other MCP-compatible client.\n\n## Tools (11)\n\n- **dossier** — full patent intelligence: bibliographic, claims, citations, family, classifications, examiner stats. 3 credits; free on 24h cache hit.\n- **prosecution** — USPTO file-wrapper documents (Office Actions, responses, amendments). Free.\n- **oa_analyze** — AI analysis of USPTO Office Actions: rejection grounds, cited prior art, suggested response arguments. First 5/application free; 1 credit each thereafter.\n- **search** — multi-strategy patent search against Google Patents (telescoping / onion-ring / faceted). 1 credit.\n- **query** — generate a single optimized Boolean query for manual paste into Google Patents. 1 credit.\n- **similar** — Google Patents similar-documents ranking. Free.\n- **citations** — backward + forward citation graph, examiner-cited flagged. Free.\n- **family** — patent family (continuations, divisionals, foreign counterparts). Free.\n- **examiner** — examiner name, art unit, allowance rate, average pendency. Free.\n- **cpc** — CPC classification code lookup. Free.\n- **balance** — credit balance + subscription status. Free.\n\nRequires an API key minted from the AI Patent Search Generator Chrome extension's Admin tab.",
+  "version": "0.2.0",
+  "description": "MCP server for the AI Patent Search Generator — 14 tools for patent intelligence: dossier, claims, claim_chart, prosecution, oa_analyze, search/query, similar, citations, family, examiner, cpc, cpc_suggest, balance.",
+  "long_description": "MCP (Model Context Protocol) server for the **AI Patent Search Generator** — patent dossiers, prosecution history, Office Action AI analysis, citation/family/CPC lookups, and Google Patents search.\n\nWorks in Claude Code, Claude Desktop, Cursor, ChatGPT-with-MCP, and any other MCP-compatible client.\n\n## Tools (14)\n\n- **dossier** — full patent intelligence: bibliographic, claims, citations, family, classifications, examiner stats. 3 credits; free on 24h cache hit.\n- **claims** — just the claims of a patent (lighter than dossier for LLM token budgets). Free when dossier is cached; 1 credit cold. *New in v0.2.0*\n- **claim_chart** — per-claim element chart with examiner-cited art mapped to each element. Free when dossier cached; 3 credits cold. *New in v0.2.0*\n- **prosecution** — USPTO file-wrapper documents (Office Actions, responses, amendments). Free.\n- **oa_analyze** — AI analysis of USPTO Office Actions: rejection grounds, cited prior art, suggested response arguments. First 5/application free; 1 credit each thereafter.\n- **search** — multi-strategy patent search against Google Patents (telescoping / onion-ring / faceted). 1 credit.\n- **query** — generate a single optimized Boolean query for manual paste into Google Patents. 1 credit.\n- **similar** — Google Patents similar-documents ranking. Free.\n- **citations** — backward + forward citation graph, examiner-cited flagged. Free.\n- **family** — patent family (continuations, divisionals, foreign counterparts). Free.\n- **examiner** — examiner name, art unit, allowance rate, average pendency. Free.\n- **cpc** — CPC classification code → title + tree context. Free.\n- **cpc_suggest** — description → suggested CPC codes via AI. 1 credit; cached. *New in v0.2.0*\n- **balance** — credit balance + subscription status. Free.\n\nRequires an API key minted from the AI Patent Search Generator Chrome extension's Admin tab.",
   "author": {
     "name": "Michael Smyth",
     "url": "https://github.com/smythmyke"
@@ -113,7 +113,19 @@
     },
     {
       "name": "cpc",
-      "description": "Look up a Cooperative Patent Classification (CPC) code and return its section, class, subclass, and group context. Accepts any level of code - section letter (e.g. H), class (H01), subclass (H01M), main group (H01M10/00), or subgroup (H01M10/0525). Free. v1.0 dataset covers all sections + ~80 common subclasses; subgroup-level descriptions land in v1.1."
+      "description": "Look up a Cooperative Patent Classification (CPC) code and return its section, class, subclass, and group context. Accepts any level of code - section letter (e.g. H), class (H01), subclass (H01M), main group (H01M10/00), or subgroup (H01M10/0525). Free. v1.0 dataset covers all sections + ~80 common subclasses; subgroup-level descriptions land in v1.2."
+    },
+    {
+      "name": "claims",
+      "description": "Fetch just the claims of a patent (numbered list of independent and dependent claims with text). Much cheaper than dossier when you only need claim text. Free when the patent's dossier is in the 24h cache; 1 credit cold."
+    },
+    {
+      "name": "claim_chart",
+      "description": "Build a per-claim element chart for a granted US patent: decomposes each independent claim into discrete elements and maps each to examiner-cited prior art from cached Office Action analyses. Free when dossier is cached; 3 credits cold. Uses only cached OA analyses - call oa_analyze first to add fresh OA data."
+    },
+    {
+      "name": "cpc_suggest",
+      "description": "Suggest CPC classification codes from a plain-English description of a technology or invention. Returns 3-5 candidate codes ranked by confidence with reasoning. 1 credit; cached by description hash for 30 days. Curated dataset (~80 subclasses) covers most software/hardware/mechanical tech well; niche chemistry/biotech may miss."
     }
   ]
 }
