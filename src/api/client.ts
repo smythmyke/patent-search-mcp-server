@@ -47,7 +47,7 @@ export class PatentSearchApiClient {
       headers: {
         "X-API-Key": this.apiKey,
         "Content-Type": "application/json",
-        "User-Agent": "patent-search-mcp-server/0.2.0",
+        "User-Agent": "patent-search-mcp-server/0.3.0",
       },
       body: body ? JSON.stringify(body) : undefined,
     });

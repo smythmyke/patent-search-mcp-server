@@ -8,7 +8,10 @@
 
 MCP (Model Context Protocol) server for the **AI Patent Search Generator** — patent dossiers, prosecution history, Office Action AI analysis, citation/family/CPC lookups, and Google Patents search. Works in Claude Code, Claude Desktop, Cursor, ChatGPT-with-MCP, and any other MCP-compatible client.
 
-14 tools available: `balance`, `dossier`, `claims`, `claim_chart`, `prosecution`, `oa_analyze`, `examiner`, `query`, `search`, `similar`, `citations`, `family`, `cpc`, `cpc_suggest`.
+24 tools available.
+
+- **Patent data:** `dossier`, `claims`, `claim_chart`, `prosecution`, `prosecution_timeline`, `oa_analyze`, `examiner`, `attorney`, `entity_status`, `term`, `assignments`, `legal_status`, `pregrant_pub`, `query`, `search`, `similar`, `citations`, `family`, `cpc`, `cpc_suggest`, `balance`.
+- **Legal intelligence (new):** `challenges` (PTAB validity challenges — who attacked the patent and did it survive), `litigation` (US district-court infringement suits — who sued whom), `company_litigation` (reverse lookup: all patent suits involving a company).
 
 ## Prerequisites
 

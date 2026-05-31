@@ -21,9 +21,19 @@ import { cpcTool, runCpc } from "./tools/cpc.js";
 import { claimChartTool, runClaimChart } from "./tools/claimChart.js";
 import { claimsTool, runClaims } from "./tools/claims.js";
 import { cpcSuggestTool, runCpcSuggest } from "./tools/cpcSuggest.js";
+import { challengesTool, runChallenges } from "./tools/challenges.js";
+import { legalStatusTool, runLegalStatus } from "./tools/legalStatus.js";
+import { assignmentsTool, runAssignments } from "./tools/assignments.js";
+import { termTool, runTerm } from "./tools/term.js";
+import { prosecutionTimelineTool, runProsecutionTimeline } from "./tools/prosecutionTimeline.js";
+import { attorneyTool, runAttorney } from "./tools/attorney.js";
+import { entityStatusTool, runEntityStatus } from "./tools/entityStatus.js";
+import { pregrantTool, runPregrant } from "./tools/pregrant.js";
+import { litigationTool, runLitigation } from "./tools/litigation.js";
+import { companyLitigationTool, runCompanyLitigation } from "./tools/companyLitigation.js";
 
 const SERVER_NAME = "patent-search";
-const SERVER_VERSION = "0.2.0";
+const SERVER_VERSION = "0.3.0";
 
 function readEnv(name: string, required = true): string {
   const value = process.env[name];
@@ -62,6 +72,16 @@ async function main(): Promise<void> {
     claimChartTool as unknown as Tool,
     claimsTool as unknown as Tool,
     cpcSuggestTool as unknown as Tool,
+    challengesTool as unknown as Tool,
+    legalStatusTool as unknown as Tool,
+    assignmentsTool as unknown as Tool,
+    termTool as unknown as Tool,
+    prosecutionTimelineTool as unknown as Tool,
+    attorneyTool as unknown as Tool,
+    entityStatusTool as unknown as Tool,
+    pregrantTool as unknown as Tool,
+    litigationTool as unknown as Tool,
+    companyLitigationTool as unknown as Tool,
   ];
 
   server.setRequestHandler(ListToolsRequestSchema, async () => ({ tools }));
@@ -84,6 +104,16 @@ async function main(): Promise<void> {
         case claimChartTool.name: return await runClaimChart(api, args ?? {});
         case claimsTool.name:     return await runClaims(api, args ?? {});
         case cpcSuggestTool.name: return await runCpcSuggest(api, args ?? {});
+        case challengesTool.name: return await runChallenges(api, args ?? {});
+        case legalStatusTool.name: return await runLegalStatus(api, args ?? {});
+        case assignmentsTool.name: return await runAssignments(api, args ?? {});
+        case termTool.name:       return await runTerm(api, args ?? {});
+        case prosecutionTimelineTool.name: return await runProsecutionTimeline(api, args ?? {});
+        case attorneyTool.name:   return await runAttorney(api, args ?? {});
+        case entityStatusTool.name: return await runEntityStatus(api, args ?? {});
+        case pregrantTool.name:   return await runPregrant(api, args ?? {});
+        case litigationTool.name: return await runLitigation(api, args ?? {});
+        case companyLitigationTool.name: return await runCompanyLitigation(api, args ?? {});
         default:
           return errorResult(`Unknown tool: ${name}`);
       }
